@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>اختبار منصة الحماية</title>
+<style>
+body {
+    font-family: Tahoma, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+.container {
+    background: #1e293b;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    width: 90%;
+    max-width: 450px;
+}
+h2 {
+    text-align: center;
+    color: #38bdf8;
+    margin-bottom: 25px;
+}
+label {
+    display: block;
+    margin-top: 15px;
+    font-size: 14px;
+    color: #cbd5e1;
+}
+input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    background: #0f172a;
+    color: #e2e8f0;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 25px;
+    border: none;
+    border-radius: 8px;
+    background: #2563eb;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+button:hover {
+    background: #1d4ed8;
+}
+button:disabled {
+    background: #475569;
+    cursor: not-allowed;
+}
+.result {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    display: none;
+}
+.result.attack {
+    background: #7f1d1d;
+    color: #fca5a5;
+    border: 1px solid #dc2626;
+}
+.result.benign {
+    background: #14532d;
+    color: #86efac;
+    border: 1px solid #16a34a;
+}
+.result.error {
+    background: #422006;
+    color: #fcd34a;
+    border: 1px solid #f59e0b;
+}
+.loading {
+    text-align: center;
+    margin-top: 10px;
+    color: #94a3b8;
+    display: none;
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <h2>🛡️ اختبار كشف الهجوم</h2>
+    
+    <label>استخدام CPU %</label>
+    <input id="cpu" type="number" value="98" min="0" max="100">
+    
+    <label>استخدام RAM %</label>
+    <input id="ram" type="number" value="95" min="0" max="100">
+    
+    <label>عرض النطاق Bandwidth Mbps</label>
+    <input id="bw" type="number" value="800" min="0">
+    
+    <button id="btn">اكتشف الآن</button>
+    <div class="loading" id="loading">جاري التحليل...</div>
+    <div id="result" class="result"></div>
+</div>
+
+<script>
+document.getElementById('btn').onclick = async () => {
+    const cpuVal = parseFloat(document.getElementById('cpu').value);
+    const ramVal = parseFloat(document.getElementById('ram').value);
+    const bwVal = parseFloat(document.getElementById('bw').value);
+    
+    const btn = document.getElementById('btn');
+    const loading = document.getElementById('loading');
+    const resultDiv = document.getElementById('result');
+    
+    btn.disabled = true;
+    loading.style.display = 'block';
+    resultDiv.style.display = 'none';
+    
+    try {
+        const res = await fetch('http://127.0.0.1:5000/predict', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                cpu: cpuVal, 
+                ram: ramVal, 
+                bandwidth: bwVal 
+            })
+        });
+        
+        if(!res.ok) throw new Error('السيرفر رد بخطأ ' + res.status);
+        
+        const data = await res.json();
+        
+        resultDiv.style.display = 'block';
+        if(data.error) {
+            resultDiv.className = 'result error';
+            resultDiv.innerHTML = 'خطأ: ' + data.error;
+        } else {
+            resultDiv.className = 'result ' + (data.prediction === 'ATTACK' ? 'attack' : 'benign');
+            resultDiv.innerHTML = `
+                النوع: ${data.prediction}<br>
+                الثقة: ${data.confidence}%
+            `;
+        }
+    } catch(e) {
+        resultDiv.style.display = 'block';
+        resultDiv.className = 'result error';
+        resultDiv.innerHTML = 'تعذر الاتصال بالسيرفر. تأكدي ان app.py شغال على بورت 5000';
+        console.error(e);
+    } finally {
+        btn.disabled = false;
+        loading.style.display = 'none';
+    }
+};
+</script>
+</body>
+</html>

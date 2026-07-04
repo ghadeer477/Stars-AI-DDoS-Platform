@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap');
+
+:root{
+  --bg-main:#0B1120;
+  --bg-sidebar:#111827;
+  --bg-card:#1E293B;
+  --border:#334155;
+
+  --text:#F8FAFC;
+  --gray:#94A3B8;
+
+  --blue:#3B82F6;
+  --red:#EF4444;
+  --green:#10B981;
+  --yellow:#F59E0B;
+  --cyan:#06B6D4;
+}
+
+
+*{
+ box-sizing:border-box;
+ font-family:'Cairo',sans-serif;
+}
+
+
+html,body,#root{
+ margin:0;
+ min-height:100%;
+ background:var(--bg-main);
+ color:var(--text);
+}
+
+
+body{
+ direction:rtl;
+}
+
+
+/* جميع البطاقات */
+div[style*="rgba(15, 23, 42"]{
+
+ background:var(--bg-card)!important;
+ border:1px solid var(--border)!important;
+ border-radius:12px!important;
+ box-shadow:none!important;
+}
+
+
+/* الأزرار */
+button{
+
+ font-family:'Cairo',sans-serif;
+}
+
+
+/* Sidebar */
+button:hover{
+
+ opacity:.9;
+
+}
+
+
+/* الجداول */
+table{
+
+ width:100%;
+ border-collapse:collapse;
+
+}
+
+
+tr:hover{
+
+ background:rgba(59,130,246,.08)!important;
+
+}
+
+
+td,th{
+
+ padding:14px;
+ border-bottom:1px solid var(--border);
+
+}
+
+
+
+/* Scroll */
+
+::-webkit-scrollbar{
+ width:8px;
+}
+
+
+::-webkit-scrollbar-track{
+ background:#0B1120;
+}
+
+
+::-webkit-scrollbar-thumb{
+ background:#334155;
+ border-radius:10px;
+}

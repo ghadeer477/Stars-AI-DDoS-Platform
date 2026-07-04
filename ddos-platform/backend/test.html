@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>اختبار DDOS</title>
+<style>
+body{font-family:Arial;max-width:600px;margin:50px auto;padding:20px;background:#f5f5f5}
+.container{background:white;padding:30px;border-radius:10px}
+h1{color:#d32f2f;text-align:center}
+label{display:block;margin-top:15px;font-weight:bold}
+input,select{width:100%;padding:10px;margin-top:5px;border:1px solid #ddd;border-radius:5px}
+button{background:#d32f2f;color:white;padding:12px;width:100%;border:none;border-radius:5px;margin-top:20px;cursor:pointer;font-size:16px}
+button:disabled{background:#999;cursor:not-allowed}
+.result{margin-top:20px;padding:15px;border-radius:5px;display:none}
+.success{background:#c8e6c9;color:#2e7d32}
+.error{background:#ffcdd2;color:#c62828}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>منصة كشف هجمات DDOS</h1>
+
+<label>نوع الهجمة:</label>
+<select id="attack">
+<option value="DNS">DNS</option>
+<option value="LDAP">LDAP</option>
+<option value="NetBIOS">NetBIOS</option>
+<option value="NTP">NTP</option>
+<option value="Syn">Syn</option>
+<option value="UDPLag">UDPLag</option>
+<option value="0.595325">0.595325</option>
+</select>
+
+<label>CPU Usage %:</label>
+<input type="number" id="cpu" value="50" min="0" max="100">
+
+<label>RAM Usage %:</label>
+<input type="number" id="ram" value="50" min="0" max="100">
+
+<button id="btn">اكتشف الآن</button>
+
+<div id="result" class="result"></div>
+</div>
+
+<script>
+document.getElementById('btn').addEventListener('click', async function(){
+const btn = this;
+const attack = document.getElementById('attack').value;
+const cpu = parseFloat(document.getElementById('cpu').value);
+const ram = parseFloat(document.getElementById('ram').value);
+const resultDiv = document.getElementById('result');
+const features = Array(80).fill(0).map(() => Math.random() * 1000);
+
+btn.disabled = true;
+btn.textContent = 'جاري الفحص...';
+resultDiv.style.display = 'block';
+resultDiv.className = 'result';
+resultDiv.innerHTML = 'انتظري...';
+
+try{
+const res = await fetch('http://localhost:5000/predict',{
+method:'POST',
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify({attack_type:attack,features:features,cpu_usage:cpu,ram_usage:ram})
+});
+
+const data = await res.json();
+
+if(data.error){
+resultDiv.className = 'result error';
+resultDiv.innerHTML = 'خطأ: ' + data.error;
+}else{
+resultDiv.className = 'result success';
+resultDiv.innerHTML = '<strong>النوع:</strong> ' + data.attack_type + '<br><strong>النتيجة:</strong> ' + data.prediction + '<br><strong>الثقة:</strong> ' + (data.confidence * 100).toFixed(2) + '%';
+}
+}catch(e){
+resultDiv.className = 'result error';
+resultDiv.innerHTML = 'تعذر الاتصال بالسيرفر. تأكدي ان app.py شغال';
+}
+btn.disabled = false;
+btn.textContent = 'اكتشف الآن';
+});
+</script>
+</body>
+</html>

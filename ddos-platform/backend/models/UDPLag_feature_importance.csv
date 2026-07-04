@@ -1,0 +1,80 @@
+Feature,Importance
+Inbound,0.595325
+URG Flag Count,0.2743931
+Fwd IAT Mean,0.036060322
+Active Mean,0.009627566
+Active Min,0.009453747
+Fwd Packet Length Min,0.0064659356
+Total Backward Packets,0.0054245917
+Flow IAT Std,0.005083433
+Min Packet Length,0.0050350176
+Fwd IAT Total,0.004492627
+Flow IAT Mean,0.0042861514
+Init_Win_bytes_forward,0.0039049867
+Flow Duration,0.0037418597
+Flow IAT Min,0.0026114872
+Total Length of Bwd Packets,0.0025637369
+Bwd Packet Length Mean,0.0024472412
+Packet Length Std,0.002242024
+Bwd Header Length,0.0022347232
+Bwd Packets/s,0.0020732693
+Total Fwd Packets,0.0020490047
+Idle Min,0.0018813935
+Flow Bytes/s,0.0017878574
+Max Packet Length,0.0015624148
+Bwd IAT Total,0.001492388
+Bwd IAT Min,0.0014581846
+ACK Flag Count,0.001292455
+Bwd Packet Length Std,0.0012341659
+Fwd IAT Min,0.0011724046
+Init_Win_bytes_backward,0.0010363467
+Active Max,0.0009761058
+Flow Packets/s,0.00093506085
+Down/Up Ratio,0.0008014978
+Fwd Packet Length Mean,0.00072329113
+Bwd IAT Std,0.0006957797
+Fwd IAT Std,0.00063939096
+Fwd Packets/s,0.000527316
+Bwd IAT Mean,0.0005261272
+Packet Length Mean,0.0005111474
+Bwd IAT Max,0.00048671445
+Flow IAT Max,0.00042066115
+Fwd Packet Length Max,0.0002961116
+Bwd Packet Length Max,2.7451993e-05
+Total Length of Fwd Packets,0.0
+Bwd Packet Length Min,0.0
+Fwd Packet Length Std,0.0
+Protocol,0.0
+Fwd IAT Max,0.0
+PSH Flag Count,0.0
+RST Flag Count,0.0
+SYN Flag Count,0.0
+FIN Flag Count,0.0
+Packet Length Variance,0.0
+Bwd URG Flags,0.0
+Fwd URG Flags,0.0
+Bwd PSH Flags,0.0
+Fwd Header Length,0.0
+Fwd PSH Flags,0.0
+Fwd Header Length.1,0.0
+CWE Flag Count,0.0
+ECE Flag Count,0.0
+Average Packet Size,0.0
+Avg Fwd Segment Size,0.0
+Avg Bwd Segment Size,0.0
+Subflow Fwd Packets,0.0
+Bwd Avg Bulk Rate,0.0
+Bwd Avg Packets/Bulk,0.0
+Bwd Avg Bytes/Bulk,0.0
+Fwd Avg Bulk Rate,0.0
+Fwd Avg Packets/Bulk,0.0
+Fwd Avg Bytes/Bulk,0.0
+Subflow Fwd Bytes,0.0
+min_seg_size_forward,0.0
+act_data_pkt_fwd,0.0
+Subflow Bwd Packets,0.0
+Subflow Bwd Bytes,0.0
+Idle Mean,0.0
+Active Std,0.0
+Idle Max,0.0
+Idle Std,0.0

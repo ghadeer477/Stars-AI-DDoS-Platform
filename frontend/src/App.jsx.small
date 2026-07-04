@@ -1,0 +1,166 @@
+import { useState } from 'react'
+
+export default function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isRegister, setIsRegister] = useState(false)
+
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [user, setUser] = useState('')
+
+  const [file, setFile] = useState(null)
+  const [result, setResult] = useState(null)
+
+  // ================= AUTH =================
+  const handleAuth = async (e) => {
+    e.preventDefault()
+
+    const endpoint = isRegister ? '/register' : '/login'
+
+    try {
+      const res = await fetch('http://16.16.65.222:5000' + endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      })
+
+      const data = await res.json()
+
+      if (data.success) {
+        if (!isRegister) {
+          setIsLoggedIn(true)
+          setUser(username)
+        } else {
+          alert('Account created successfully')
+          setIsRegister(false)
+        }
+      } else {
+        alert(data.message || 'Auth failed')
+      }
+
+    } catch (err) {
+      alert('Server connection failed')
+    }
+  }
+
+  // ================= LOGOUT =================
+  const handleLogout = () => {
+    setIsLoggedIn(false)
+    setUser('')
+    setResult(null)
+  }
+
+  // ================= ANALYZE FILE =================
+  const handleSubmit = async () => {
+    if (!file) return alert('Please select file')
+
+    const formData = new FormData()
+    formData.append('file', file)
+
+    try {
+      const res = await fetch('http://16.16.65.222:5000/predict', {
+        method: 'POST',
+        body: formData
+      })
+
+      const data = await res.json()
+
+      setResult(data)
+
+    } catch (err) {
+      alert('Analysis failed')
+    }
+  }
+
+  // ================= UI =================
+  return (
+    <div style={{ padding: 20, fontFamily: 'Arial' }}>
+
+      {/* ================= LOGIN ================= */}
+      {!isLoggedIn ? (
+        <form onSubmit={handleAuth} style={{ maxWidth: 300 }}>
+
+          <h2>{isRegister ? 'Register' : 'Login'}</h2>
+
+          <input
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            style={{ width: '100%', padding: 10, marginBottom: 10 }}
+          />
+
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            style={{ width: '100%', padding: 10, marginBottom: 10 }}
+          />
+
+          <button type="submit" style={{ width: '100%', padding: 10 }}>
+            {isRegister ? 'Register' : 'Login'}
+          </button>
+
+          <p
+            onClick={() => setIsRegister(!isRegister)}
+            style={{ cursor: 'pointer', color: 'blue', marginTop: 10 }}
+          >
+            {isRegister ? 'Already have account?' : 'Create new account'}
+          </p>
+
+        </form>
+      ) : (
+        <div>
+
+          {/* ================= HEADER ================= */}
+          <h2>Welcome {user}</h2>
+          <button onClick={handleLogout}>Logout</button>
+
+          <hr />
+
+          {/* ================= UPLOAD ================= */}
+          <input
+            type="file"
+            onChange={(e) => setFile(e.target.files[0])}
+          />
+
+          <button onClick={handleSubmit} style={{ marginLeft: 10 }}>
+            Analyze
+          </button>
+
+          {/* ================= RESULTS ================= */}
+          <div style={{ marginTop: 20 }}>
+
+            <h2>Security Alerts</h2>
+
+            {result?.success && result?.alerts?.length > 0 ? (
+              result.alerts.map((a, i) => (
+                <div
+                  key={i}
+                  style={{
+                    padding: 10,
+                    marginBottom: 10,
+                    background: '#111',
+                    color: '#fff'
+                  }}
+                >
+                  <p><b>Rule:</b> {a.rule}</p>
+                  <p><b>Source:</b> {a.src}</p>
+                  <p><b>Agent:</b> {a.agent}</p>
+                  <p><b>MITRE:</b> {a.mitre}</p>
+                  <p><b>Level:</b> {a.level}</p>
+                  <p><b>Time:</b> {a.time}</p>
+                </div>
+              ))
+            ) : (
+              <p>No alerts yet</p>
+            )}
+
+          </div>
+
+        </div>
+      )}
+
+    </div>
+  )
+}

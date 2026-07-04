@@ -1,0 +1,36 @@
+# Secrets
+.env
+*.pem
+*.key
+*.crt
+*.token
+
+# Python
+backend/venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Node
+frontend/node_modules/
+node_modules/
+frontend/dist/
+
+# Logs and runtime files
+*.log
+gunicorn.log
+nohup.out
+detection_history.json
+blocked_ips_history.json
+backend/detection_history.json
+backend/blocked_ips_history.json
+
+# Backups
+*backup*
+*_backup_*
+
+# OS/editor
+.DS_Store
+.vscode/
+.idea/
