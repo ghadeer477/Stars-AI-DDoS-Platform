@@ -2,6 +2,7 @@ import os
 import json
 import subprocess
 import ipaddress
+import socket
 from collections import Counter
 from datetime import datetime, timezone
 
@@ -83,6 +84,16 @@ def get_allowlist():
         pass
 
     allow.add("127.0.0.1")
+
+    # Prevent blocking Telegram API addresses used for alert notifications
+    try:
+        for info in socket.getaddrinfo("api.telegram.org", 443, type=socket.SOCK_STREAM):
+            ip = info[4][0]
+            if ":" not in ip:
+                allow.add(ip)
+    except Exception:
+        pass
+
     return allow
 
 

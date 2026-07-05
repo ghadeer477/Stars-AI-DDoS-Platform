@@ -7,6 +7,8 @@ HISTORY_FILE = os.path.join(BASE_DIR, "detection_history.json")
 
 
 RECOMMENDATIONS = {
+    "Potential Zero-Day": "Isolate suspicious traffic, review source IPs, collect packet evidence, apply temporary rate limiting, and investigate before confirming the attack type.",
+    "Unknown DDoS": "Isolate suspicious traffic, review source IPs, collect packet evidence, apply temporary rate limiting, and investigate before confirming the attack type.",
     "DNS": "Apply DNS rate limiting, monitor recursive queries, and block suspicious DNS sources.",
     "DNS Flood": "Apply DNS rate limiting, monitor recursive queries, and block suspicious DNS sources.",
     "LDAP": "Restrict LDAP exposure, apply firewall filtering, and block abnormal LDAP request sources.",
@@ -66,6 +68,9 @@ def calculate_severity(prediction, confidence, attack_count, total_flows):
 
 def get_recommendation(attack_type, model, prediction):
     prediction = str(prediction or "").upper()
+
+    if prediction in ("SUSPICIOUS", "UNKNOWN"):
+        return RECOMMENDATIONS["Potential Zero-Day"]
 
     if prediction == "NORMAL":
         return RECOMMENDATIONS["NORMAL"]
