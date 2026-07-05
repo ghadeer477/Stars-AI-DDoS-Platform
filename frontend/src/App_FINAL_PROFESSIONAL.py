@@ -55,7 +55,7 @@ export default function App() {
     e.preventDefault()
     const endpoint = isRegister? '/register' : '/login'
     try {
-      const res = await fetch('http://16.16.65.222:5000' + endpoint, {
+      const res = await fetch('/api' + endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
@@ -100,7 +100,7 @@ export default function App() {
     const token = localStorage.getItem('token')
 
     try {
-      const res = await fetch('http://16.16.65.222:5000/predict', {
+      const res = await fetch('/api/predict', {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
         body: formData
@@ -139,7 +139,7 @@ export default function App() {
     const token = localStorage.getItem('token')
 
     try {
-      const res = await fetch('http://16.16.65.222:5000/predict-live', {
+      const res = await fetch('/api/predict-live', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

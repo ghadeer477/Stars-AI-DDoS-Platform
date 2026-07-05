@@ -18,7 +18,7 @@ export default function App() {
     const endpoint = isRegister ? '/register' : '/login'
 
     try {
-      const res = await fetch('http://16.16.65.222:5000' + endpoint, {
+      const res = await fetch('/api' + endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
@@ -58,7 +58,7 @@ export default function App() {
     formData.append('file', file)
 
     try {
-      const res = await fetch('http://16.16.65.222:5000/predict', {
+      const res = await fetch('/api/predict', {
         method: 'POST',
         body: formData
       })
