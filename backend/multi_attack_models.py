@@ -238,3 +238,27 @@ def auto_classify_attack(features, threshold=0.50):
         return normal_labels, normal_confidences, "Auto Classifier - NORMAL", "NORMAL", all_scores
 
     return best["labels"], best["confidences"], best["model"], best["attack_type"], all_scores
+
+
+
+# ===== EXTRA ATTACK MODELS AUTO-LOADER =====
+# This patch adds trained attack models from backend/new_attack_models.
+# MSSQL/MySQL is intentionally excluded.
+try:
+    import os as _extra_os
+    from extra_attack_models import load_extra_attack_models as _load_extra_attack_models
+
+    _original_load_all_attack_models = load_all_attack_models
+
+    def load_all_attack_models():
+        _original_load_all_attack_models()
+        try:
+            _load_extra_attack_models(LOADED_MODELS, _extra_os.path.dirname(__file__))
+            print("Loaded attack models with extra types:", list(LOADED_MODELS.keys()))
+        except Exception as e:
+            print("[Extra Models] Failed to load extra attack models:", repr(e))
+
+except Exception as e:
+    print("[Extra Models] Auto-loader patch skipped:", repr(e))
+# ===== END EXTRA ATTACK MODELS AUTO-LOADER =====
+
