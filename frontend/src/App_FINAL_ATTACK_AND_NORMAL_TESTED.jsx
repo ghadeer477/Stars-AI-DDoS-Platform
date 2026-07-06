@@ -886,6 +886,10 @@ export default function App() {
           <option value="NetBIOS">NetBIOS</option>
           <option value="Syn">SYN Flood</option>
           <option value="UDPLag">UDP Lag</option>
+                  <option value="SNMP">SNMP Flood</option>
+                  <option value="SSDP">SSDP Flood</option>
+                  <option value="TFTP">TFTP Flood</option>
+                  <option value="Portmap">Portmap Flood</option>
         </select>
 
         <label className="upload-zone">
